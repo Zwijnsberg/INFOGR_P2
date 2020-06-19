@@ -1,0 +1,11 @@
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.exe.config
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.exe
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.pdb
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\OpenTK.dll
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\OpenTK.pdb
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\OpenTK.xml
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\Template.csprojAssemblyReference.cache
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\Template.csproj.CoreCompileInputs.cache
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\Template.csproj.CopyComplete
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.exe
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.pdb
