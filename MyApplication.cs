@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using OpenTK;
+//using OpenTK.Graphics.ES10;
+using OpenTK.Graphics.OpenGL;
 
 namespace Template
 {
@@ -36,6 +38,10 @@ namespace Template
 			// create the render target
 			target = new RenderTarget( screen.width, screen.height );
 			quad = new ScreenQuad();
+			//set the light
+			int lightID = GL.GetUniformLocation(shader.programID, "lightPos");
+			GL.UseProgram(shader.programID);
+			GL.Uniform3(lightID, 0.0f, 10.0f, 0.0f);
 		}
 
 		// tick for background surface
@@ -71,8 +77,8 @@ namespace Template
 				target.Bind();
 
 				// render scene to render target
-				mesh.Render( shader, Tpot * Tcamera * Tview, wood );
-				floor.Render( shader, Tfloor * Tcamera * Tview, wood );
+				mesh.Render( shader, Tpot * Tcamera * Tview, toWorld, wood );
+				floor.Render( shader, Tfloor * Tcamera * Tview, toWorld, wood );
 
 				// render quad
 				target.Unbind();
@@ -81,8 +87,8 @@ namespace Template
 			else
 			{
 				// render scene directly to the screen
-				mesh.Render( shader, Tpot * Tcamera * Tview, wood );
-				floor.Render( shader, Tfloor * Tcamera * Tview, wood );
+				mesh.Render( shader, Tpot * Tcamera * Tview, toWorld, wood );
+				floor.Render( shader, Tfloor * Tcamera * Tview, toWorld, wood );
 			}
 		}
 	}
