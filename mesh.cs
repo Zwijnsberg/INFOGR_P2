@@ -15,14 +15,21 @@ namespace Template
 		public ObjQuad[] quads;                 // quads (4 vertex indices)
 		int vertexBufferId;                     // vertex buffer
 		int triangleBufferId;                   // triangle buffer
-		int quadBufferId;                       // quad buffer
+		int quadBufferId;                       // quad bufferkk
+		private Matrix4 transform;
 
 		// constructor
-		public Mesh( string fileName )
+		public Mesh( string fileName)  //int[,] mvMatrix
 		{
 			MeshLoader loader = new MeshLoader();
 			loader.Load( this, fileName );
 		}
+
+		public Matrix4 modelViewMatrix
+        {
+			get { return transform; }
+			set { transform = value; }
+        }
 
 		// initialization; called during first render
 		public void Prepare( Shader shader )
@@ -47,7 +54,7 @@ namespace Template
 		}
 
 		// render the mesh using the supplied shader and matrix
-		public void Render( Shader shader, Matrix4 transform, Texture texture )
+		public void Render( Shader shader, Texture texture )
 		{
 			// on first run, prepare buffers
 			Prepare( shader );

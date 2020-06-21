@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using INFOGR2019Tmpl8;
 using OpenTK;
 
 namespace Template
@@ -7,13 +8,16 @@ namespace Template
 	{
 		// member variables
 		public Surface screen;                  // background surface for printing etc.
-		Mesh mesh, floor;                       // a mesh to draw using OpenGL
+		Mesh car, flag, floor;                       // a mesh to draw using OpenGL
 		const float PI = 3.1415926535f;         // PI
-		float a = 0;                            // teapot rotation angle
+		float a = 0;
+		float b = 0;
 		Stopwatch timer;                        // timer for measuring frame duration
 		Shader shader;                          // shader to use for rendering
 		Shader postproc;                        // shader to use for post processing
 		Texture wood;                           // texture to use for rendering
+		Texture silver;
+		Texture dark;
 		RenderTarget target;                    // intermediate render target
 		ScreenQuad quad;                        // screen filling quad for post processing
 		bool useRenderTarget = true;
@@ -21,8 +25,9 @@ namespace Template
 		// initialize
 		public void Init()
 		{
-			// load teapot
-			mesh = new Mesh( "../../assets/teapot.obj" );
+			// load car and flag
+			flag = new Mesh("../../assets/teapot.obj");
+			car = new Mesh( "../../assets/db8.obj" );
 			floor = new Mesh( "../../assets/floor.obj" );
 			// initialize stopwatch
 			timer = new Stopwatch();
@@ -33,6 +38,8 @@ namespace Template
 			postproc = new Shader( "../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl" );
 			// load a texture
 			wood = new Texture( "../../assets/wood.jpg" );
+			silver = new Texture("../../assets/silver3.jpg");
+			dark = new Texture("../../assets/dark4.jpg");
 			// create the render target
 			target = new RenderTarget( screen.width, screen.height );
 			quad = new ScreenQuad();
@@ -55,23 +62,39 @@ namespace Template
 
 			// prepare matrix for vertex shader
 			float angle90degrees = PI / 2;
-			Matrix4 Tpot = Matrix4.CreateScale( 0.5f ) * Matrix4.CreateFromAxisAngle( new Vector3( 0, 1, 0 ), a );
-			Matrix4 Tfloor = Matrix4.CreateScale( 4.0f ) * Matrix4.CreateFromAxisAngle( new Vector3( 0, 1, 0 ), a );
-			Matrix4 Tcamera = Matrix4.CreateTranslation( new Vector3( 0, -14.5f, 0 ) ) * Matrix4.CreateFromAxisAngle( new Vector3( 1, 0, 0 ), angle90degrees );
-			Matrix4 Tview = Matrix4.CreatePerspectiveFieldOfView( 1.2f, 1.3f, .1f, 1000 );
+			//Matrix4 Tflag = Matrix4.CreateScale(0.08f) * Matrix4.CreateRotationY(10f) * Matrix4.CreateTranslation(new Vector3(a, 0, 0)) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 9 + a) * Matrix4.CreateTranslation(new Vector3(0, 0, a)) * Matrix4.CreateTranslation(new Vector3(0, 2, 0));
+			//Matrix4 Tcar = Matrix4.CreateScale(0.4f) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a) * Matrix4.CreateTranslation(new Vector3(b, 0, b)); //translate: x, z, y
+			Matrix4 Tcar = Matrix4.CreateScale(0.5f) * Matrix4.CreateRotationY(10f) * Matrix4.CreateTranslation(new Vector3(a, 0, 0)) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 9 + a) * Matrix4.CreateTranslation(new Vector3(0, 0, a));
+			Matrix4 Tflag = Matrix4.CreateScale(0.08f) * Tcar * Matrix4.CreateTranslation(new Vector3(0, 2, 0));
+			Matrix4 Tfloor = Matrix4.CreateScale(4.0f) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 0);
+			Matrix4 Tcamera = Matrix4.CreateTranslation(new Vector3(0, -14.5f, 0)) * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), angle90degrees);
+			Matrix4 Tview = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
+
+			// defining the model view matrix for the mesh object
+			flag.modelViewMatrix = Tflag * Tcamera * Tview;
+			car.modelViewMatrix = Tcar * Tcamera * Tview ;
+			floor.modelViewMatrix = Tfloor * Tcamera * Tview;
+
+			Mesh[] carChildren = {flag};
+
+			SceneGraph carSg = new SceneGraph(null, car, carChildren, Tcamera);
 
 			// update rotation
-			a += 0.001f * frameDuration;
+			a += 0.0005f * frameDuration;
 			if( a > 2 * PI ) a -= 2 * PI;
 
-			if( useRenderTarget )
+			b = a * a;
+			if (a > 6 * PI) a -= 10 * PI;
+
+			if ( useRenderTarget )
 			{
 				// enable render target
 				target.Bind();
 
 				// render scene to render target
-				mesh.Render( shader, Tpot * Tcamera * Tview, wood );
-				floor.Render( shader, Tfloor * Tcamera * Tview, wood );
+				flag.Render(shader, dark);
+				car.Render( shader, silver);
+				floor.Render( shader, wood );
 
 				// render quad
 				target.Unbind();
@@ -80,8 +103,9 @@ namespace Template
 			else
 			{
 				// render scene directly to the screen
-				mesh.Render( shader, Tpot * Tcamera * Tview, wood );
-				floor.Render( shader, Tfloor * Tcamera * Tview, wood );
+				flag.Render(shader, dark);
+				car.Render( shader, silver);
+				floor.Render( shader, wood );
 			}
 		}
 	}
