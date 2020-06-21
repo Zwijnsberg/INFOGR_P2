@@ -16,7 +16,7 @@ void main()
     vec3 L = lightPos - worldPos.xyz;
     float dist = L.length();
     L = normalize(L);
-    vec3 lightColor = vec3( 10, 10, 8 );
+    vec3 lightColor = vec3( 100, 100, 80 );
     vec3 materialColor = texture(pixels, uv).xyz;
     float attenuation = 1.0f / (dist * dist);
     outputColor = vec4( materialColor * max( 0.0f, dot( L, normal.xyz ) ) * attenuation * lightColor, 1);
