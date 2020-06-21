@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using INFOGR2019Tmpl8;
 using OpenTK;
+//using OpenTK.Graphics.ES10;
+using OpenTK.Graphics.OpenGL;
 
 namespace Template
 {
@@ -43,6 +45,10 @@ namespace Template
 			// create the render target
 			target = new RenderTarget( screen.width, screen.height );
 			quad = new ScreenQuad();
+			//set the light
+			int lightID = GL.GetUniformLocation(shader.programID, "lightPos");
+			GL.UseProgram(shader.programID);
+			GL.Uniform3(lightID, 0.0f, 10.0f, 0.0f);
 		}
 
 		// tick for background surface
@@ -62,12 +68,12 @@ namespace Template
 
 			// prepare matrix for vertex shader
 			float angle90degrees = PI / 2;
-			//Matrix4 Tflag = Matrix4.CreateScale(0.08f) * Matrix4.CreateRotationY(10f) * Matrix4.CreateTranslation(new Vector3(a, 0, 0)) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 9 + a) * Matrix4.CreateTranslation(new Vector3(0, 0, a)) * Matrix4.CreateTranslation(new Vector3(0, 2, 0));
-			//Matrix4 Tcar = Matrix4.CreateScale(0.4f) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a) * Matrix4.CreateTranslation(new Vector3(b, 0, b)); //translate: x, z, y
+
 			Matrix4 Tcar = Matrix4.CreateScale(0.5f) * Matrix4.CreateRotationY(10f) * Matrix4.CreateTranslation(new Vector3(a, 0, 0)) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 9 + a) * Matrix4.CreateTranslation(new Vector3(0, 0, a));
 			Matrix4 Tflag = Matrix4.CreateScale(0.08f) * Tcar * Matrix4.CreateTranslation(new Vector3(0, 2, 0));
-			Matrix4 Tfloor = Matrix4.CreateScale(4.0f) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 0);
-			Matrix4 Tcamera = Matrix4.CreateTranslation(new Vector3(0, -14.5f, 0)) * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), angle90degrees);
+			Matrix4 toWorld = Tflag;
+			Matrix4 Tfloor = Matrix4.CreateScale( 4.0f ) * Matrix4.CreateFromAxisAngle( new Vector3( 0, 1, 0 ), a );
+			Matrix4 Tcamera = Matrix4.CreateTranslation( new Vector3( 0, -14.5f, 0 ) ) * Matrix4.CreateFromAxisAngle( new Vector3( 1, 0, 0 ), angle90degrees );
 			Matrix4 Tview = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
 
 			// defining the model view matrix for the mesh object
@@ -92,9 +98,10 @@ namespace Template
 				target.Bind();
 
 				// render scene to render target
-				flag.Render(shader, dark);
-				car.Render( shader, silver);
-				floor.Render( shader, wood );
+				flag.Render(shader, Tflag * Tcamera * Tview, toWorld, dark);
+				car.Render( shader, Tcar*Tcamera*Tview, toWorld, silver);
+				floor.Render( shader, Tfloor * Tcamera * Tview, toWorld, wood );
+
 
 				// render quad
 				target.Unbind();
@@ -103,9 +110,9 @@ namespace Template
 			else
 			{
 				// render scene directly to the screen
-				flag.Render(shader, dark);
-				car.Render( shader, silver);
-				floor.Render( shader, wood );
+				flag.Render(shader, Tflag * Tcamera * Tview, toWorld, dark);
+				car.Render(shader, Tcar * Tcamera * Tview, toWorld, silver);
+				floor.Render(shader, Tfloor * Tcamera * Tview, toWorld, wood);
 			}
 		}
 	}

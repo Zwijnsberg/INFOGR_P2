@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.exe.config
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.exe
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.pdb
@@ -9,3 +10,16 @@ C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\obj\Debug\Template.csproj.Core
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\obj\Debug\Template.csproj.CopyComplete
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.exe
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.pdb
+=======
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.exe.config
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.exe
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.pdb
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\OpenTK.dll
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\OpenTK.pdb
+C:\Users\menno\Documents\GitHub\INFOGR_P2\bin\Debug\OpenTK.xml
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\Template.csprojAssemblyReference.cache
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\Template.csproj.CoreCompileInputs.cache
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\Template.csproj.CopyComplete
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.exe
+C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.pdb
+>>>>>>> cd900cd6b6d47918e00899a8409b6773525e45da
