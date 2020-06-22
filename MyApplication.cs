@@ -6,6 +6,24 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Template
 {
+	class Light
+	{
+		public int lightID;
+		public Shader shader;
+
+		public Light(int lightID, Shader shader)
+		{
+			this.lightID = lightID;
+			this.shader = shader;
+		}
+
+		public void setLight(float x, float y, float z)
+		{
+			GL.UseProgram(shader.programID);
+			GL.Uniform3(lightID, x, y, z);
+		}
+	}
+
 	class MyApplication
 	{
 		// member variables
@@ -46,13 +64,12 @@ namespace Template
 			target = new RenderTarget( screen.width, screen.height );
 			quad = new ScreenQuad();
 			//set the light
-			int lightID = GL.GetUniformLocation(shader.programID, "lightPos");
-			GL.UseProgram(shader.programID);
-			GL.Uniform3(lightID, 0.0f, 10.0f, 0.0f);
+			Light light1 = new Light(GL.GetUniformLocation(shader.programID, "lightPos"), shader);
+			light1.setLight(0.0f, 10.0f, 0.0f);
 			//set the ambient light color
 			int ambientID = GL.GetUniformLocation(shader.programID, "ambientColor");
 			GL.UseProgram(shader.programID);
-			GL.Uniform3(ambientID, 0.8f, 0.2f, 0.3f);
+			GL.Uniform3(ambientID, 0.8f, 0.3f, 0.3f);
 
 		}
 

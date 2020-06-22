@@ -6,10 +6,10 @@ in vec4 normal;					// interpolated normal
 in vec4 worldPos;
 uniform sampler2D pixels;		// texture sampler
 uniform vec3 ambientColor;
+uniform vec3 lightPos;
 
 // shader output
 out vec4 outputColor;
-uniform vec3 lightPos;
 
 // fragment shader
 void main()
