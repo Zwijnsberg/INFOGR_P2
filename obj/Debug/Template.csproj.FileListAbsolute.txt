@@ -9,6 +9,7 @@ C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\Template.csproj.CoreCompileI
 C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\Template.csproj.CopyComplete
 C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.exe
 C:\Users\menno\Documents\GitHub\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.pdb
+<<<<<<< HEAD
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.exe.config
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.exe
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\bin\Debug\INFOGR2019Tmpl8.pdb
@@ -20,3 +21,5 @@ C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\obj\Debug\Template.csproj.Core
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\obj\Debug\Template.csproj.CopyComplete
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.exe
 C:\Users\Admin\Documents\Local_Projects\INFOGR_P2\obj\Debug\INFOGR2019Tmpl8.pdb
+=======
+>>>>>>> cc6d9a93b807ddba299abaaec3e4b830ae045380
