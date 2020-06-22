@@ -49,6 +49,11 @@ namespace Template
 			int lightID = GL.GetUniformLocation(shader.programID, "lightPos");
 			GL.UseProgram(shader.programID);
 			GL.Uniform3(lightID, 0.0f, 10.0f, 0.0f);
+			//set the ambient light color
+			int ambientID = GL.GetUniformLocation(shader.programID, "ambientColor");
+			GL.UseProgram(shader.programID);
+			GL.Uniform3(ambientID, 0.8f, 0.2f, 0.3f);
+
 		}
 
 		// tick for background surface
