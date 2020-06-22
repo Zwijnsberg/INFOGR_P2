@@ -45,21 +45,23 @@ namespace Template
 		// initialize
 		public void Init()
 		{
+			// create shaders
+			shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
+			postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
+			// load a texture
+			wood = new Texture("../../assets/wood.jpg");
+			silver = new Texture("../../assets/silver3.jpg");
+			dark = new Texture("../../assets/dark4.jpg");
+
 			// load car and flag
-			flag = new Mesh("../../assets/teapot.obj");
-			car = new Mesh( "../../assets/db8.obj" );
-			floor = new Mesh( "../../assets/floor.obj" );
+			flag = new Mesh("../../assets/teapot.obj", car, null, shader, dark);
+			car = new Mesh("../../assets/db8.obj", floor, new Mesh[] { flag }, shader, silver );
+			floor = new Mesh("../../assets/floor.obj", null, new Mesh[] { car }, shader, wood );
+
 			// initialize stopwatch
 			timer = new Stopwatch();
 			timer.Reset();
 			timer.Start();
-			// create shaders
-			shader = new Shader( "../../shaders/vs.glsl", "../../shaders/fs.glsl" );
-			postproc = new Shader( "../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl" );
-			// load a texture
-			wood = new Texture( "../../assets/wood.jpg" );
-			silver = new Texture("../../assets/silver3.jpg");
-			dark = new Texture("../../assets/dark4.jpg");
 			// create the render target
 			target = new RenderTarget( screen.width, screen.height );
 			quad = new ScreenQuad();
@@ -100,12 +102,13 @@ namespace Template
 
 			// defining the model view matrix for the mesh object
 			flag.modelViewMatrix = Tflag * Tcamera * Tview;
+			flag.toWorld = toWorld;
 			car.modelViewMatrix = Tcar * Tcamera * Tview ;
+			car.toWorld = toWorld;
 			floor.modelViewMatrix = Tfloor * Tcamera * Tview;
+			floor.toWorld = toWorld;
 
-			Mesh[] carChildren = {flag};
-
-			SceneGraph carSg = new SceneGraph(null, car, carChildren, Tcamera);
+			SceneGraph floor_sg = new SceneGraph(floor, Tcamera);
 
 			// update rotation
 			a += 0.0005f * frameDuration;
@@ -119,10 +122,15 @@ namespace Template
 				// enable render target
 				target.Bind();
 
+				// render scene via Scenegraph
+				floor_sg.Render(Tcamera);
+
+
 				// render scene to render target
+				/*
 				flag.Render(shader, Tflag * Tcamera * Tview, toWorld, dark);
 				car.Render( shader, Tcar*Tcamera*Tview, toWorld, silver);
-				floor.Render( shader, Tfloor * Tcamera * Tview, toWorld, wood );
+				floor.Render( shader, Tfloor * Tcamera * Tview, toWorld, wood ); */
 
 
 				// render quad
@@ -131,10 +139,14 @@ namespace Template
 			}
 			else
 			{
-				// render scene directly to the screen
+				// render scene via SceneGraph
+				floor_sg.Render(Tcamera);
+
+				// render scene directly to the 
+				/*
 				flag.Render(shader, Tflag * Tcamera * Tview, toWorld, dark);
 				car.Render(shader, Tcar * Tcamera * Tview, toWorld, silver);
-				floor.Render(shader, Tfloor * Tcamera * Tview, toWorld, wood);
+				floor.Render(shader, Tfloor * Tcamera * Tview, toWorld, wood); */
 			}
 		}
 	}
