@@ -67,7 +67,7 @@ namespace Template
 			quad = new ScreenQuad();
 			//set the light
 			Light light1 = new Light(GL.GetUniformLocation(shader.programID, "lightPos"), shader);
-			light1.setLight(0, -3, 0);
+			light1.setLight(-3, -3, -3);
 			//set the ambient light color
 			int ambientID = GL.GetUniformLocation(shader.programID, "ambientColor");
 			GL.UseProgram(shader.programID);

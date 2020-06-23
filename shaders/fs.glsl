@@ -1,5 +1,5 @@
 ﻿#version 330
- 
+
 // shader input
 in vec2 uv;						// interpolated texture coordinates
 in vec4 normal;					// interpolated normal
@@ -27,15 +27,16 @@ void main()
     vec4 cam4 = vec4( cameraPos.xyz, 1);
     vec4 Rv4 = cam4 - 2 * dot(cam4, normal) * normal;
     vec3 Rv = normalize(Rv4.xyz);
-    
+
     vec3 lightColorSpec = lightColorDiff;
 
-    // outputColor = vec4( materialColor * (max( 0.0f, dot( L, normal.xyz ) ) * attenuation * lightColorDiff 
+    // outputColor = vec4( materialColor * (max( 0.0f, dot( L, normal.xyz ) ) * attenuation * lightColorDiff
     // + ambientColor
     // + lightColorSpec * max( 0.0f, pow( dot(L, Rv), 0.8f ))), 1);
 
-    outputColor = vec4 (materialColor * (max( 0.0f, dot( -L, normal.xyz )) * attenuation * lightColorDiff * 100 ) ,1);
+    // outputColor = vec4 (materialColor * (max( 0.0f, dot( -L, normal.xyz )) * attenuation * lightColorDiff * 100 ) ,1);
 
+    outputColor = vec4 (materialColor * (max( 0.0f, dot( -L, normal.xyz )) * attenuation * lightColorDiff * 100 ), 1);
 
     // outputColor = vec4 (normal.xyz, 1);
 }
