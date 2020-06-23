@@ -20,6 +20,6 @@ void main()
 	worldPos = toWorld * vec4(vPosition, 1.0f);
 
 	// forward normal and uv coordinate; will be interpolated over triangle
-	normal = toWorld * vec4( vNormal, 0.0f );
+	normal = normalize(toWorld * vec4( vNormal, 0.0f ));
 	uv = vUV;
 }

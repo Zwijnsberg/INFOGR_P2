@@ -6,6 +6,24 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Template
 {
+	class Light
+	{
+		public int lightID;
+		public Shader shader;
+
+		public Light(int lightID, Shader shader)
+		{
+			this.lightID = lightID;
+			this.shader = shader;
+		}
+
+		public void setLight(float x, float y, float z)
+		{
+			GL.UseProgram(shader.programID);
+			GL.Uniform3(lightID, x, y, z);
+		}
+	}
+
 	class MyApplication
 	{
 		// member variables
@@ -59,13 +77,12 @@ namespace Template
 			target = new RenderTarget( screen.width, screen.height );
 			quad = new ScreenQuad();
 			//set the light
-			int lightID = GL.GetUniformLocation(shader.programID, "lightPos");
-			GL.UseProgram(shader.programID);
-			GL.Uniform3(lightID, 0.0f, 10.0f, 0.0f);
+			Light light1 = new Light(GL.GetUniformLocation(shader.programID, "lightPos"), shader);
+			light1.setLight(-3, -3, -3);
 			//set the ambient light color
 			int ambientID = GL.GetUniformLocation(shader.programID, "ambientColor");
 			GL.UseProgram(shader.programID);
-			GL.Uniform3(ambientID, 0.8f, 0.2f, 0.3f);
+			GL.Uniform3(ambientID, 0.5f, 0.4f, 0.3f);
 
 		}
 
@@ -87,8 +104,14 @@ namespace Template
 
 			// prepare matrix for vertex shader
 			float angle90degrees = PI / 2;
+			Vector3 cameraPos = new Vector3(0, 30f, 0);
+			int cameraID = GL.GetUniformLocation(shader.programID, "cameraPos");
+			GL.UseProgram(shader.programID);
+			GL.Uniform3(cameraID, cameraPos);
+
 
 			Matrix4 Tcamera = Matrix4.CreateTranslation(new Vector3(moveX, moveZ, moveY)) * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), angle90degrees);
+
 			Matrix4 Tview = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
 
 			// defining the model view matrix for the mesh object
@@ -113,11 +136,12 @@ namespace Template
 			SceneGraph car_sg = new SceneGraph(car);
 
 			// update rotation
+
 			a += 0.0012f * frameDuration;
 			if( a > 5 * PI ) a -= 2 * PI;
 
-
 			if (rotate > 2 * PI) rotate -= 2 * PI;
+
 
 
 			if ( useRenderTarget )
