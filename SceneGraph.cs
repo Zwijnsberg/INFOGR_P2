@@ -4,7 +4,7 @@ using OpenTK;
 using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL;
 using Template;
-using System.Drawing.Drawing2D;
+
 
 // using meshes
 
@@ -12,13 +12,17 @@ namespace INFOGR2019Tmpl8
 {
     class SceneGraph
     {
+		// store the children and the parent of this current mesh
+
         public List<SceneGraph> children = new List<SceneGraph>();
         public Mesh me; 
         public Mesh parent;
-		public Vector3 pos;
-		public float rotation;
-		public Vector3 scale;
 
+		// transform matrix of this mesh
+		public Matrix4 transformX;
+
+
+		// constructor of scene graph, defining the mesh and its parent and children
 		public SceneGraph(Mesh Me)
         {
             me = Me;
@@ -35,13 +39,12 @@ namespace INFOGR2019Tmpl8
             }
         }
 
-		// initialization; called during first render
-		
 
 		// render the mesh using the supplied shader and matrix
 		public void Render(Matrix4 camera)
 		{
-			Matrix4 transform = Matrix4.CreateTranslation(pos) * Matrix4.CreateRotationY(rotation) * Matrix4.CreateScale(scale);
+
+			Matrix4 transform = transformX;
 			me.Render(me.shader, transform * camera, transform, me.texture);		
 
 			// call render function of the children here?
