@@ -15,9 +15,12 @@ namespace INFOGR2019Tmpl8
         public Mesh me; 
         public Mesh parent;
 
-		private Matrix4 transform;
+		public Matrix4 scale;
+		public Matrix4 rotation;
+		public Matrix4 position;
 
-		public SceneGraph(Mesh Me, Matrix4 camera)
+
+		public SceneGraph(Mesh Me)
         {
             me = Me;
             parent = me.parent;
@@ -26,27 +29,43 @@ namespace INFOGR2019Tmpl8
             {
                 for (int i = 0; i < me.kids.Length; i++)
                 {
-                    SceneGraph child = new SceneGraph(me.kids[i], camera);
+                    SceneGraph child = new SceneGraph(me.kids[i]);
                     children.Add(child);
                 }
             }
         }
 
+		public Matrix4 Scale
+		{
+			get { return scale; }
+			set { scale = value; }
+		}
+
+		public Matrix4 Rotation
+		{
+			get { return rotation; }
+			set { rotation = value; }
+		}
+
+		public Matrix4 Position
+		{
+			get { return position; }
+			set { position = value; }
+		}
 		// initialization; called during first render
-		
+
 
 		// render the mesh using the supplied shader and matrix
 		public void Render(Matrix4 camera)
 		{
 			Mesh mesh = me;
 			Shader shader = mesh.shader;
-			Matrix4 transform = mesh.modelViewMatrix;
+			Matrix4 transform = mesh.modelViewMatrix; // *camera;
 			Matrix4 toWorld = mesh.toWorld;
 			Texture texture = mesh.texture;
 
-			//me.Render(shader, transform, toWorld, texture);
+			//REMOVE: me.Render(shader, transform, toWorld, texture);
 
-			
 			// on first run, prepare buffers
 			me.Prepare(shader);
 

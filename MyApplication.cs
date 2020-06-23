@@ -13,7 +13,6 @@ namespace Template
 		Mesh car, flag, floor;                       // a mesh to draw using OpenGL
 		const float PI = 3.1415926535f;         // PI
 		float a = 0;
-		float b = 0;
 		Stopwatch timer;                        // timer for measuring frame duration
 		Shader shader;                          // shader to use for rendering
 		Shader postproc;                        // shader to use for post processing
@@ -24,21 +23,33 @@ namespace Template
 		ScreenQuad quad;                        // screen filling quad for post processing
 		bool useRenderTarget = true;
 
+		// all the global variables for moving the camera, controlled from the template class
+		public static float moveX;                   
+		public static float moveY;
+		public static float moveZ;
+		public static float rotate;
+
 		// initialize
 		public void Init()
 		{
+			moveX = 0;
+			moveY = 0;
+			moveZ = -14.5f;
+			rotate = 0;
+
+
 			// create shaders
 			shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
 			postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
 			// load a texture
-			wood = new Texture("../../assets/wood.jpg");
+			wood = new Texture("../../assets/track1.png");
 			silver = new Texture("../../assets/silver3.jpg");
 			dark = new Texture("../../assets/dark4.jpg");
 
 			// load car and flag
-			flag = new Mesh("../../assets/teapot.obj", car, null, shader, dark);
+			flag = new Mesh("../../assets/propeller1.obj", car, null, shader, dark);
 			car = new Mesh("../../assets/db8.obj", floor, new Mesh[] { flag }, shader, silver );
-			floor = new Mesh("../../assets/floor.obj", null, new Mesh[] { car }, shader, wood );
+			floor = new Mesh("../../assets/floor.obj", null, null, shader, wood );
 
 			// initialize stopwatch
 			timer = new Stopwatch();
@@ -58,6 +69,7 @@ namespace Template
 
 		}
 
+
 		// tick for background surface
 		public void Tick()
 		{
@@ -76,29 +88,37 @@ namespace Template
 			// prepare matrix for vertex shader
 			float angle90degrees = PI / 2;
 
-			Matrix4 Tcar = Matrix4.CreateScale(0.5f) * Matrix4.CreateRotationY(10f) * Matrix4.CreateTranslation(new Vector3(a, 0, 0)) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 9 + a) * Matrix4.CreateTranslation(new Vector3(0, 0, a));
-			Matrix4 Tflag = Matrix4.CreateScale(0.08f) * Tcar * Matrix4.CreateTranslation(new Vector3(0, 2, 0));
-			Matrix4 toWorld = Tflag;
-			Matrix4 Tfloor = Matrix4.CreateScale( 4.0f ) * Matrix4.CreateFromAxisAngle( new Vector3( 0, 1, 0 ), a );
-			Matrix4 Tcamera = Matrix4.CreateTranslation( new Vector3( 0, -14.5f, 0 ) ) * Matrix4.CreateFromAxisAngle( new Vector3( 1, 0, 0 ), angle90degrees );
+			Matrix4 Tcamera = Matrix4.CreateTranslation(new Vector3(moveX, moveZ, moveY)) * Matrix4.CreateFromAxisAngle(new Vector3(1, 0, 0), angle90degrees);
 			Matrix4 Tview = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
 
 			// defining the model view matrix for the mesh object
-			flag.modelViewMatrix = Tflag * Tcamera * Tview;
-			flag.toWorld = toWorld;
-			car.modelViewMatrix = Tcar * Tcamera * Tview ;
-			car.toWorld = toWorld;
-			floor.modelViewMatrix = Tfloor * Tcamera * Tview;
-			floor.toWorld = toWorld;
+			Matrix4 Tcar = Matrix4.CreateScale(0.5f) * Matrix4.CreateRotationY(10f) * Matrix4.CreateTranslation(new Vector3(a, 0, 0)) * Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 9 + a +rotate) * Matrix4.CreateTranslation(new Vector3(0, 0, a));
+			Matrix4 turn = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a*3);
+			car.modelViewMatrix = Tcar * Tcamera * Tview;
 
-			SceneGraph floor_sg = new SceneGraph(floor, Tcamera);
+			Matrix4 Tflag = Matrix4.CreateFromAxisAngle(new Vector3(1, 1, 1), 2f) * Matrix4.CreateScale(0.002f)* Matrix4.CreateTranslation(new Vector3(0, 0, -2.4f)) * turn * Tcar * Matrix4.CreateTranslation(new Vector3(0, 1.35f, 0));
+			flag.modelViewMatrix = Tflag * Tcamera * Tview;
+			flag.toWorld = Tflag;
+			car.toWorld = Tflag;
+
+			Matrix4 Tfloor = Matrix4.CreateScale( 3.5f ) * Matrix4.CreateFromAxisAngle( new Vector3( 0, 1, 0 ), rotate );
+			floor.modelViewMatrix = Tfloor * Tcamera * Tview;
+			floor.toWorld = Tflag;
+
+			Matrix4 toWorld = Tflag;
+
+			// Defining the Scene Graphs
+			SceneGraph floor_sg = new SceneGraph(floor);
+
+			SceneGraph car_sg = new SceneGraph(car);
 
 			// update rotation
-			a += 0.0005f * frameDuration;
-			if( a > 2 * PI ) a -= 2 * PI;
+			a += 0.0012f * frameDuration;
+			if( a > 5 * PI ) a -= 2 * PI;
 
-			b = a * a;
-			if (a > 6 * PI) a -= 10 * PI;
+
+			if (rotate > 2 * PI) rotate -= 2 * PI;
+
 
 			if ( useRenderTarget )
 			{
@@ -107,14 +127,7 @@ namespace Template
 
 				// render scene via Scenegraph
 				floor_sg.Render(Tcamera);
-
-
-				// render scene to render target
-				/*
-				flag.Render(shader, Tflag * Tcamera * Tview, toWorld, dark);
-				car.Render( shader, Tcar*Tcamera*Tview, toWorld, silver);
-				floor.Render( shader, Tfloor * Tcamera * Tview, toWorld, wood ); */
-
+				car_sg.Render(Tcamera);
 
 				// render quad
 				target.Unbind();
@@ -124,12 +137,8 @@ namespace Template
 			{
 				// render scene via SceneGraph
 				floor_sg.Render(Tcamera);
+				car_sg.Render(Tcamera);
 
-				// render scene directly to the 
-				/*
-				flag.Render(shader, Tflag * Tcamera * Tview, toWorld, dark);
-				car.Render(shader, Tcar * Tcamera * Tview, toWorld, silver);
-				floor.Render(shader, Tfloor * Tcamera * Tview, toWorld, wood); */
 			}
 		}
 	}

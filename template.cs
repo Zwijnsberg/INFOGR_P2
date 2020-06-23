@@ -5,6 +5,7 @@ using System.Threading;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
+
 // The template provides you with a window which displays a 'linear frame buffer', i.e.
 // a 1D array of pixels that represents the graphical contents of the window.
 
@@ -28,8 +29,11 @@ namespace Template
 		static int screenID;            // unique integer identifier of the OpenGL texture
 		static MyApplication app;       // instance of the application
 		static bool terminated = false; // application terminates gracefully when this is true
-		protected override void OnLoad( EventArgs e )
+
+
+		protected override void OnLoad( EventArgs e)
 		{
+			
 			// called during application initialization
 			GL.ClearColor( Color.Black );
 			GL.Enable( EnableCap.Texture2D );
@@ -42,6 +46,27 @@ namespace Template
 			screenID = app.screen.GenTexture();
 			app.Init();
 		}
+
+		protected override void OnKeyPress(OpenTK.KeyPressEventArgs e)
+		{
+			if (e.KeyChar == 'a')
+				MyApplication.moveX += 0.5f;
+			else if (e.KeyChar == 'd')
+				MyApplication.moveX -= 0.5f;
+			else if (e.KeyChar == 'w')
+				MyApplication.moveY += 0.5f;
+			else if (e.KeyChar == 's')
+				MyApplication.moveY -= 0.5f;
+			else if (e.KeyChar == 'q')
+				MyApplication.rotate += 0.04f;
+			else if (e.KeyChar == 'e')
+				MyApplication.rotate -= 0.04f;
+			else if (e.KeyChar == 'r')
+				MyApplication.moveZ += 0.3f;
+			else if (e.KeyChar == 'f')
+				MyApplication.moveZ -= 0.3f;
+		}
+
 		protected override void OnUnload( EventArgs e )
 		{
 			// called upon app close
