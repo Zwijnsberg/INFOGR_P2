@@ -39,20 +39,6 @@ namespace Template
 			loader.Load( this, fileName );
 		}
 
-
-		public Matrix4 modelViewMatrix
-		{
-			get { return transform; }
-			set { transform = value; }
-		}
-
-
-		public Matrix4 toWorld
-		{
-			get { return ToWorld; }
-			set { ToWorld = value; }
-		}
-
 		//EVERYTHING BELOW HAS BEEN TRANSFERED TO SCENEGRAPH.CS
 
 		// initialization; called during first render

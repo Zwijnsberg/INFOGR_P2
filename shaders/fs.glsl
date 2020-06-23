@@ -36,7 +36,11 @@ void main()
 
     // outputColor = vec4 (materialColor * (max( 0.0f, dot( -L, normal.xyz )) * attenuation * lightColorDiff * 100 ) ,1);
 
-    outputColor = vec4 (materialColor * (max( 0.0f, dot( -L, normal.xyz )) * attenuation * lightColorDiff * 100 ), 1);
+    // outputColor = vec4 (materialColor * (max( 0.0f, dot( -L, normal.xyz )) * attenuation * lightColorDiff * 100 ), 1);
 
-    // outputColor = vec4 (normal.xyz, 1);
+    outputColor = vec4 (materialColor * attenuation * 500 * (max( 0.0f, dot( L, normal.xyz ))) * lightColorDiff , 1);
+
+    // outputColor = vec4 (vec3(dot(worldPos.xyz, worldPos.xyz) * 0.1), 1);
+
+    // outputColor = worldPos;
 }
