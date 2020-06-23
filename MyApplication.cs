@@ -67,7 +67,7 @@ namespace Template
 			quad = new ScreenQuad();
 			//set the light
 			Light light1 = new Light(GL.GetUniformLocation(shader.programID, "lightPos"), shader);
-			light1.setLight(0, 0, 0);
+			light1.setLight(0, -3, 0);
 			//set the ambient light color
 			int ambientID = GL.GetUniformLocation(shader.programID, "ambientColor");
 			GL.UseProgram(shader.programID);
@@ -116,7 +116,7 @@ namespace Template
 
 			// update rotation
 			a += 0.0005f * frameDuration;
-			if( a > 2 * PI ) a -= 2 * PI;
+			if ( a > 2 * PI ) a -= 2 * PI;
 
 			b = a * a;
 			if (a > 6 * PI) a -= 10 * PI;
