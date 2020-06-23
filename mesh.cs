@@ -28,10 +28,9 @@ namespace Template
 		private Matrix4 ToWorld;
 
 		// constructor
-		public Mesh( string fileName, Mesh Parent, Mesh[] Children, Shader Shader, Texture Texture)  //int[,] mvMatrix
+		public Mesh( string fileName, Mesh Parent, Shader Shader, Texture Texture)  //int[,] mvMatrix
 		{
 			parent = Parent;
-			kids = Children;
 			shader = Shader;
 			texture = Texture;
 

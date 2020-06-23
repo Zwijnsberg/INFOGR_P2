@@ -54,9 +54,9 @@ namespace Template
 			dark = new Texture("../../assets/dark4.jpg");
 
 			// load car and flag
-			flag = new Mesh("../../assets/teapot.obj", car, null, shader, dark);
-			car = new Mesh("../../assets/db8.obj", floor, new Mesh[] { flag }, shader, silver );
-			floor = new Mesh("../../assets/floor.obj", null, new Mesh[] { car }, shader, wood );
+			flag = new Mesh("../../assets/teapot.obj", car, shader, dark);
+			car = new Mesh("../../assets/db8.obj", floor, shader, silver );
+			floor = new Mesh("../../assets/floor.obj", null, shader, wood );
 
 			// initialize stopwatch
 			timer = new Stopwatch();
